@@ -1,0 +1,43 @@
+﻿<html>
+<head>
+<script src='https://api.mapbox.com/mapbox-gl-js/v0.34.0/mapbox-gl.js'></script>
+<link href='https://api.mapbox.com/mapbox-gl-js/v0.34.0/mapbox-gl.css' rel='stylesheet' />
+<style>
+        body { margin:0; padding:0; }
+        #map { position:absolute; top:0; bottom:0; width:100%; }
+    </style>
+</head>
+
+<body>
+  <div id='map'></div>
+<script>
+mapboxgl.accessToken = 'pk.eyJ1IjoiYWRyaWFuNzA1IiwiYSI6ImNqMHE4Yng2MDAxZW0ycWp3ZjVnZ2R0aG0ifQ.ro-qjebdqH2K_plc_t4VEg';
+var map = new mapboxgl.Map({
+container: 'map',
+style: 'mapbox://styles/adrian705/cj0qaspy0006m2smy3yjp7udo',
+center: [144.9751608, -37.8274812],
+zoom: '12'
+});
+
+map.on('click', function (e) {
+    // Use queryRenderedFeatures to get features at a click event's point
+    // Use layer option to avoid getting results from other layers
+    var features = map.queryRenderedFeatures(e.point, { layers: ['drinking-fountain'] });
+    // if there are features within the given radius of the click event,
+    // fly to the location of the click event
+    if (features.length) {
+        // Get coordinates from the symbol and center the map on those coordinates
+        map.flyTo({center: features[0].geometry.coordinates, zoom: '17'});
+    }
+});
+
+
+// Use the same approach as above to indicate that the symbols are clickable
+// by changing the cursor style to 'pointer'.
+map.on('mousemove', function (e) {
+    var features = map.queryRenderedFeatures(e.point, { layers: ['drinking-fountain'] });
+    map.getCanvas().style.cursor = features.length ? 'pointer' : '';
+});
+</script>
+</body>
+</html>
